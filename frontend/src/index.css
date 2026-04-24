@@ -1,0 +1,176 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply text-slate-900 antialiased;
+    font-family: Inter, "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+    background:
+      radial-gradient(circle at top left, rgba(249, 115, 22, 0.12), transparent 28%),
+      radial-gradient(circle at top right, rgba(15, 23, 42, 0.08), transparent 22%),
+      linear-gradient(180deg, #f8fafc 0%, #eef2ff 100%);
+  }
+
+  ::selection {
+    background: rgba(249, 115, 22, 0.2);
+    color: #111827;
+  }
+}
+
+@layer components {
+  .portal-shell {
+    @apply min-h-screen text-slate-900;
+  }
+
+  .dashboard-hero {
+    @apply overflow-hidden rounded-[2rem] border border-white/60 bg-gradient-to-br from-slate-950 via-slate-900 to-orange-700 px-6 py-6 text-white shadow-[0_30px_100px_-45px_rgba(15,23,42,0.65)] backdrop-blur;
+  }
+
+  .dashboard-eyebrow {
+    @apply inline-flex items-center rounded-full border border-white/20 bg-white/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.24em] text-orange-100;
+  }
+
+  .dashboard-title {
+    @apply text-3xl font-semibold tracking-tight text-white md:text-4xl;
+  }
+
+  .dashboard-subtitle {
+    @apply max-w-3xl text-sm leading-6 text-slate-200 md:text-base;
+  }
+
+  .dashboard-actions {
+    @apply flex flex-wrap items-center gap-3;
+  }
+
+  .dashboard-metrics-grid {
+    @apply grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4;
+  }
+
+  .dashboard-kpi {
+    @apply rounded-[1.5rem] border border-white/70 bg-white/85 p-5 shadow-[0_20px_70px_-35px_rgba(15,23,42,0.32)] backdrop-blur transition-transform duration-200 hover:-translate-y-0.5;
+  }
+
+  .dashboard-kpi-label {
+    @apply text-xs font-semibold uppercase tracking-[0.22em] text-slate-500;
+  }
+
+  .dashboard-kpi-value {
+    @apply text-2xl font-semibold tracking-tight text-slate-900 md:text-3xl;
+  }
+
+  .dashboard-kpi-note {
+    @apply text-sm text-slate-500;
+  }
+
+  .dashboard-kpi-icon {
+    @apply flex h-11 w-11 items-center justify-center rounded-2xl shadow-lg;
+  }
+
+  .dashboard-panel {
+    @apply rounded-[1.75rem] border border-white/70 bg-white/90 shadow-[0_20px_70px_-40px_rgba(15,23,42,0.35)] backdrop-blur;
+  }
+
+  .dashboard-panel-header {
+    @apply border-b border-slate-200/70 px-5 py-4 md:px-6;
+  }
+
+  .dashboard-panel-title {
+    @apply text-lg font-semibold text-slate-900;
+  }
+
+  .dashboard-panel-subtitle {
+    @apply mt-1 text-sm text-slate-500;
+  }
+
+  .dashboard-panel-body {
+    @apply px-5 py-5 md:px-6;
+  }
+
+  .portal-sidebar-wrapper {
+    @apply lg:sticky lg:top-24 lg:self-start;
+  }
+
+  .portal-sidebar {
+    @apply rounded-[1.5rem] border border-white/70 bg-white/90 p-4 shadow-[0_18px_60px_-40px_rgba(15,23,42,0.35)] backdrop-blur;
+  }
+
+  .portal-sidebar-compact {
+    @apply px-2 py-3;
+  }
+
+  .portal-sidebar-title {
+    @apply mb-3 text-xs font-semibold uppercase tracking-[0.2em] text-slate-500;
+  }
+
+  .portal-sidebar-toggle {
+    @apply inline-flex h-8 w-8 items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-500 transition hover:bg-slate-100 hover:text-slate-700;
+  }
+
+  .portal-sidebar-link {
+    @apply block rounded-xl px-3 py-2.5 text-sm font-medium text-slate-600 transition-all duration-200 hover:bg-slate-100 hover:text-slate-900;
+  }
+
+  .portal-sidebar-link-active {
+    @apply bg-orange-50 text-orange-700 shadow-sm;
+  }
+
+  .portal-sidebar-link-disabled {
+    @apply block cursor-not-allowed rounded-xl px-3 py-2.5 text-sm font-medium text-slate-400;
+  }
+
+  .portal-mobile-menu-btn {
+    @apply inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white/90 px-4 py-2 text-sm font-semibold text-slate-700 shadow-sm backdrop-blur transition hover:bg-slate-100;
+  }
+
+  .portal-mobile-sidebar-overlay {
+    @apply fixed inset-0 z-50;
+  }
+
+  .portal-mobile-sidebar-backdrop {
+    @apply absolute inset-0 bg-slate-900/45;
+  }
+
+  .portal-mobile-sidebar-sheet {
+    @apply absolute inset-y-0 left-0 w-[18rem] max-w-[86vw] overflow-y-auto border-r border-white/60 bg-slate-50 p-4 shadow-2xl;
+  }
+
+  .btn-primary {
+    @apply inline-flex items-center justify-center rounded-xl bg-gradient-to-r from-orange-500 to-amber-500 px-6 py-3 font-semibold text-white shadow-lg shadow-orange-500/20 transition-all duration-200 hover:-translate-y-0.5 hover:from-orange-600 hover:to-amber-600;
+  }
+  
+  .btn-secondary {
+    @apply inline-flex items-center justify-center rounded-xl border border-slate-200 bg-white px-6 py-3 font-semibold text-slate-700 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-slate-300 hover:bg-slate-50;
+  }
+  
+  .card {
+    @apply overflow-hidden rounded-[1.5rem] border border-white/70 bg-white/90 shadow-[0_18px_60px_-40px_rgba(15,23,42,0.35)] backdrop-blur transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_25px_70px_-35px_rgba(15,23,42,0.4)];
+  }
+  
+  .input-field {
+    @apply w-full rounded-xl border border-slate-200 bg-white/90 px-4 py-3 text-slate-900 shadow-sm outline-none transition focus:border-orange-500 focus:ring-4 focus:ring-orange-500/15;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.animate-slide-up {
+  animation: slideUp 0.3s ease-out;
+}
+
+.page-fade-in {
+  animation: slideUp 0.45s ease-out;
+}

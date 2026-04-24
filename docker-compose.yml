@@ -1,0 +1,67 @@
+services:
+  mongodb:
+    image: mongo:6
+    container_name: weekend-mojo-mongodb
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_ROOT_PASSWORD}
+    networks:
+      - weekend-mojo-network
+
+  backend:
+    build: ./backend
+    container_name: weekend-mojo-backend
+    restart: unless-stopped
+    depends_on:
+      - mongodb
+    environment:
+      NODE_ENV: production
+      MONGO_URI: mongodb://admin:${MONGO_ROOT_PASSWORD}@mongodb:27017/weekendmojo?authSource=admin
+      PORT: 5000
+    env_file:
+      - ./backend/.env
+    networks:
+      - weekend-mojo-network
+
+  frontend:
+    build: ./frontend
+    container_name: weekend-mojo-frontend
+    restart: unless-stopped
+    depends_on:
+      - backend
+    environment:
+      VITE_API_URL: /api
+      VITE_SOCKET_URL: ${SOCKET_URL}
+    volumes:
+      - ./frontend/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./frontend/dist:/usr/share/nginx/html:ro
+    networks:
+      - weekend-mojo-network
+
+  nginx:
+    image: nginx:alpine
+    container_name: weekend-mojo-nginx
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+      - ./ssl:/etc/nginx/ssl
+    depends_on:
+      - backend
+      - frontend
+    networks:
+      - weekend-mojo-network
+
+volumes:
+  mongo_data:
+
+networks:
+  weekend-mojo-network:
+    driver: bridge

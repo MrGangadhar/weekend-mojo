@@ -1,0 +1,6 @@
+# Ignore environment files containing secrets
+.env
+.env.*
+!env.example
+# Ignore service account keys
+firebase-service-account.json
