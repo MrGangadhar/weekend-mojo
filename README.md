@@ -30,3 +30,4 @@ Use the internal login page for staff roles:
 - Editor: `editor01` / `demo1234`
 
 Open the internal login page from the public login screen or go directly to `/internal-login`.
+# weekend-mojo
