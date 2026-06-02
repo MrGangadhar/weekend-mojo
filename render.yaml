@@ -1,0 +1,27 @@
+services:
+  - type: web
+    name: weekend-mojo-backend
+    env: docker
+    dockerfilePath: backend/Dockerfile
+    startCommand: node server.js
+    healthCheckPath: /health
+    plan: starter
+    envVars:
+      - key: PORT
+        value: "10000"
+      - key: MONGODB_URI
+        value: ""
+      - key: RAZORPAY_KEY_ID
+        value: ""
+      - key: RAZORPAY_KEY_SECRET
+        value: ""
+      - key: TWILIO_ACCOUNT_SID
+        value: ""
+      - key: TWILIO_AUTH_TOKEN
+        value: ""
+      - key: FIREBASE_SERVICE_ACCOUNT
+        value: ""
+      - key: JWT_SECRET
+        value: ""
+      - key: FRONTEND_URL
+        value: "https://weekend-mojo-gangadhars-projects-da006e70.vercel.app"
