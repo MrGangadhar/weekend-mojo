@@ -1,6 +1,5 @@
 {
   "version": 2,
-  "plugins": ["vercel/vercel-plugin"],
   "builds": [
     { "src": "package.json", "use": "@vercel/static-build", "config": { "distDir": "dist" } }
   ],
