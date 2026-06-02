@@ -1,27 +1,129 @@
 import { useState, useEffect } from 'react';
-import { tripAPI, adminAPI } from '../../services/api';
-import { FiEdit, FiTrash2, FiPlus, FiEye } from 'react-icons/fi';
+import { useSearchParams } from 'react-router-dom';
+import { tripAPI } from '../../services/api';
+import { FiEdit, FiTrash2, FiPlus, FiEye, FiX } from 'react-icons/fi';
 import toast from 'react-hot-toast';
 import { DashboardShell } from '../../components/common/DashboardLayout';
 
+const blankItineraryDay = (day = 1) => ({
+  day,
+  title: '',
+  places: '',
+  activities: '',
+  breakfast: '',
+  lunch: '',
+  dinner: '',
+  stayName: '',
+  stayType: '',
+  stayAddress: '',
+});
+
+const splitList = (value = '') => value.split(/[\n,]/).map((item) => item.trim()).filter(Boolean);
+
+const formatList = (items = []) => (items || []).join('\n');
+
+const formatImages = (images = []) => (images || []).map((image) => `${image.url}${image.caption ? ` | ${image.caption}` : ''}`).join('\n');
+
+const parseImages = (value = '') => splitList(value).map((line) => {
+  const [urlPart, ...captionParts] = line.split('|');
+  const url = urlPart.trim();
+  if (!url) return null;
+  const caption = captionParts.join('|').trim();
+  return { url, caption };
+}).filter(Boolean);
+
+const parseDates = (value = '') => splitList(value)
+  .map((item) => new Date(item))
+  .filter((date) => !Number.isNaN(date.getTime()));
+
+const tripToItineraryDraft = (itinerary = []) => {
+  const source = itinerary.length > 0 ? itinerary : [blankItineraryDay(1)];
+
+  return source.map((day, index) => ({
+    day: day.day || index + 1,
+    title: day.title || '',
+    places: formatList(day.places || []),
+    activities: formatList(day.activities || []),
+    breakfast: day.dining?.breakfast || '',
+    lunch: day.dining?.lunch || '',
+    dinner: day.dining?.dinner || '',
+    stayName: day.stay?.name || '',
+    stayType: day.stay?.type || '',
+    stayAddress: day.stay?.address || '',
+  }));
+};
+
+const itineraryDraftToPayload = (draft = []) => draft
+  .filter((day) => day.title || day.places || day.activities || day.stayName)
+  .map((day, index) => ({
+    day: Number(day.day) || index + 1,
+    title: day.title.trim(),
+    places: splitList(day.places),
+    activities: splitList(day.activities),
+    dining: {
+      breakfast: day.breakfast.trim(),
+      lunch: day.lunch.trim(),
+      dinner: day.dinner.trim(),
+    },
+    stay: {
+      name: day.stayName.trim(),
+      type: day.stayType.trim(),
+      address: day.stayAddress.trim(),
+    },
+  }));
+
+const tripToFormData = (trip) => ({
+  title: trip?.title || '',
+  shortDescription: trip?.shortDescription || '',
+  description: trip?.description || '',
+  location: trip?.location || '',
+  duration: trip?.duration || '',
+  price: trip?.price || '',
+  thumbnail: trip?.thumbnail || '',
+  status: trip?.status || 'active',
+  inclusionsText: formatList(trip?.inclusions || []),
+  exclusionsText: formatList(trip?.exclusions || []),
+  tagsText: formatList(trip?.tags || []),
+  availableDatesText: formatList((trip?.availableDates || []).map((date) => new Date(date).toISOString().slice(0, 10))),
+  imagesText: formatImages(trip?.images || []),
+});
+
 export default function TripsManagement() {
+  const [searchParams, setSearchParams] = useSearchParams();
   const [trips, setTrips] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const [editingTrip, setEditingTrip] = useState(null);
+  const [itineraryDraft, setItineraryDraft] = useState([blankItineraryDay(1)]);
   const [formData, setFormData] = useState({
     title: '',
+    shortDescription: '',
     description: '',
     location: '',
     duration: '',
     price: '',
-    images: [],
-    itinerary: []
+    thumbnail: '',
+    status: 'active',
+    inclusionsText: '',
+    exclusionsText: '',
+    tagsText: '',
+    availableDatesText: '',
+    imagesText: ''
   });
   
   useEffect(() => {
     fetchTrips();
   }, []);
+
+  useEffect(() => {
+    if (searchParams.get('create') === '1') {
+      resetForm();
+      setShowModal(true);
+      const nextParams = new URLSearchParams(searchParams);
+      nextParams.delete('create');
+      setSearchParams(nextParams, { replace: true });
+    }
+  }, [searchParams, setSearchParams]);
   
   const fetchTrips = async () => {
     try {
@@ -36,12 +138,23 @@ export default function TripsManagement() {
   
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const payload = {
+      ...formData,
+      price: Number(formData.price),
+      images: parseImages(formData.imagesText),
+      itinerary: itineraryDraftToPayload(itineraryDraft),
+      inclusions: splitList(formData.inclusionsText),
+      exclusions: splitList(formData.exclusionsText),
+      tags: splitList(formData.tagsText),
+      availableDates: parseDates(formData.availableDatesText),
+    };
+
     try {
       if (editingTrip) {
-        await tripAPI.updateTrip(editingTrip._id, formData);
+        await tripAPI.updateTrip(editingTrip._id, payload);
         toast.success('Trip updated successfully');
       } else {
-        await tripAPI.createTrip(formData);
+        await tripAPI.createTrip(payload);
         toast.success('Trip created successfully');
       }
       fetchTrips();
@@ -63,17 +176,43 @@ export default function TripsManagement() {
       }
     }
   };
+
+  const updateItineraryDay = (index, field, value) => {
+    setItineraryDraft((current) => current.map((day, dayIndex) => (
+      dayIndex === index ? { ...day, [field]: value } : day
+    )));
+  };
+
+  const addItineraryDay = () => {
+    setItineraryDraft((current) => [...current, blankItineraryDay(current.length + 1)]);
+  };
+
+  const removeItineraryDay = (index) => {
+    setItineraryDraft((current) => {
+      const next = current.filter((_, dayIndex) => dayIndex !== index);
+      return next.length > 0
+        ? next.map((day, dayIndex) => ({ ...day, day: dayIndex + 1 }))
+        : [blankItineraryDay(1)];
+    });
+  };
   
   const resetForm = () => {
     setFormData({
       title: '',
+      shortDescription: '',
       description: '',
       location: '',
       duration: '',
       price: '',
-      images: [],
-      itinerary: []
+      thumbnail: '',
+      status: 'active',
+      inclusionsText: '',
+      exclusionsText: '',
+      tagsText: '',
+      availableDatesText: '',
+      imagesText: ''
     });
+    setItineraryDraft([blankItineraryDay(1)]);
     setEditingTrip(null);
   };
 
@@ -150,10 +289,10 @@ export default function TripsManagement() {
                 <tr key={trip._id}>
                   <td className="px-6 py-4">
                     <div className="flex items-center">
-                      <img src={trip.thumbnail} alt={trip.title} className="w-10 h-10 rounded object-cover mr-3" />
+                      <img src={trip.thumbnail || trip.images?.[0]?.url} alt={trip.title} className="w-10 h-10 rounded object-cover mr-3" />
                       <div>
                         <div className="font-medium text-gray-900">{trip.title}</div>
-                        <div className="text-sm text-gray-500 line-clamp-1">{trip.description}</div>
+                        <div className="text-sm text-gray-500 line-clamp-1">{trip.shortDescription || trip.description}</div>
                       </div>
                     </div>
                   </td>
@@ -171,7 +310,8 @@ export default function TripsManagement() {
                     <button
                       onClick={() => {
                         setEditingTrip(trip);
-                        setFormData(trip);
+                        setFormData(tripToFormData(trip));
+                        setItineraryDraft(tripToItineraryDraft(trip.itinerary));
                         setShowModal(true);
                       }}
                       className="text-blue-600 hover:text-blue-800 mr-3"
@@ -222,6 +362,19 @@ export default function TripsManagement() {
                 />
               </div>
               
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Short Description
+                </label>
+                <textarea
+                  value={formData.shortDescription}
+                  onChange={(e) => setFormData({ ...formData, shortDescription: e.target.value })}
+                  className="input-field"
+                  rows="2"
+                  placeholder="A concise, premium-style summary that appears on cards and trip detail pages."
+                />
+              </div>
+
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   Description *
@@ -279,6 +432,21 @@ export default function TripsManagement() {
               
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Trip Status
+                </label>
+                <select
+                  value={formData.status}
+                  onChange={(e) => setFormData({ ...formData, status: e.target.value })}
+                  className="input-field"
+                >
+                  <option value="active">Active</option>
+                  <option value="inactive">Inactive</option>
+                  <option value="upcoming">Upcoming</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
                   Image URL (Thumbnail)
                 </label>
                 <input
@@ -288,6 +456,203 @@ export default function TripsManagement() {
                   className="input-field"
                   placeholder="https://..."
                 />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Gallery Images
+                </label>
+                <textarea
+                  value={formData.imagesText}
+                  onChange={(e) => setFormData({ ...formData, imagesText: e.target.value })}
+                  className="input-field"
+                  rows="3"
+                  placeholder="https://image-1.jpg | Sunset view\nhttps://image-2.jpg | Beach deck"
+                />
+                <p className="mt-1 text-xs text-gray-500">One image per line. Use <span className="font-medium">URL | caption</span> if you want captions.</p>
+              </div>
+
+              <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Inclusions
+                  </label>
+                  <textarea
+                    value={formData.inclusionsText}
+                    onChange={(e) => setFormData({ ...formData, inclusionsText: e.target.value })}
+                    className="input-field"
+                    rows="5"
+                    placeholder="AC transport\nHotel stay\nBreakfast"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Exclusions
+                  </label>
+                  <textarea
+                    value={formData.exclusionsText}
+                    onChange={(e) => setFormData({ ...formData, exclusionsText: e.target.value })}
+                    className="input-field"
+                    rows="5"
+                    placeholder="Flights\nPersonal expenses\nMeals not mentioned"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Tags
+                  </label>
+                  <textarea
+                    value={formData.tagsText}
+                    onChange={(e) => setFormData({ ...formData, tagsText: e.target.value })}
+                    className="input-field"
+                    rows="5"
+                    placeholder="beach\nfamily\nweekend"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Available Dates
+                </label>
+                <textarea
+                  value={formData.availableDatesText}
+                  onChange={(e) => setFormData({ ...formData, availableDatesText: e.target.value })}
+                  className="input-field"
+                  rows="3"
+                  placeholder="2026-06-10\n2026-06-24"
+                />
+                <p className="mt-1 text-xs text-gray-500">Use one ISO date per line, like 2026-06-10.</p>
+              </div>
+
+              <div className="border-t pt-4">
+                <div className="flex items-center justify-between gap-3 mb-3">
+                  <div>
+                    <h3 className="font-semibold text-gray-900">Itinerary Builder</h3>
+                    <p className="text-sm text-gray-500">Create a day-by-day plan with places, activities, dining, and stay details.</p>
+                  </div>
+                  <button type="button" onClick={addItineraryDay} className="btn-secondary text-sm">
+                    + Add Day
+                  </button>
+                </div>
+
+                <div className="space-y-4">
+                  {itineraryDraft.map((day, index) => (
+                    <div key={index} className="rounded-2xl border border-gray-200 bg-gray-50/80 p-4">
+                      <div className="mb-3 flex items-center justify-between gap-3">
+                        <h4 className="font-medium text-gray-900">Day {day.day}</h4>
+                        <button
+                          type="button"
+                          onClick={() => removeItineraryDay(index)}
+                          disabled={itineraryDraft.length === 1}
+                          className="text-sm text-red-600 disabled:cursor-not-allowed disabled:text-red-300"
+                        >
+                          Remove
+                        </button>
+                      </div>
+
+                      <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
+                        <div>
+                          <label className="mb-1 block text-xs font-medium uppercase tracking-wide text-gray-500">Day Number</label>
+                          <input
+                            type="number"
+                            min="1"
+                            value={day.day}
+                            onChange={(e) => updateItineraryDay(index, 'day', e.target.value)}
+                            className="input-field"
+                          />
+                        </div>
+                        <div>
+                          <label className="mb-1 block text-xs font-medium uppercase tracking-wide text-gray-500">Title</label>
+                          <input
+                            type="text"
+                            value={day.title}
+                            onChange={(e) => updateItineraryDay(index, 'title', e.target.value)}
+                            className="input-field"
+                            placeholder="Arrival, sightseeing, campfire night..."
+                          />
+                        </div>
+                        <div>
+                          <label className="mb-1 block text-xs font-medium uppercase tracking-wide text-gray-500">Places</label>
+                          <input
+                            type="text"
+                            value={day.places}
+                            onChange={(e) => updateItineraryDay(index, 'places', e.target.value)}
+                            className="input-field"
+                            placeholder="Baga Beach, Fort Aguada"
+                          />
+                        </div>
+                        <div>
+                          <label className="mb-1 block text-xs font-medium uppercase tracking-wide text-gray-500">Activities</label>
+                          <input
+                            type="text"
+                            value={day.activities}
+                            onChange={(e) => updateItineraryDay(index, 'activities', e.target.value)}
+                            className="input-field"
+                            placeholder="Sunset walk, kayaking"
+                          />
+                        </div>
+                        <div>
+                          <label className="mb-1 block text-xs font-medium uppercase tracking-wide text-gray-500">Breakfast</label>
+                          <input
+                            type="text"
+                            value={day.breakfast}
+                            onChange={(e) => updateItineraryDay(index, 'breakfast', e.target.value)}
+                            className="input-field"
+                          />
+                        </div>
+                        <div>
+                          <label className="mb-1 block text-xs font-medium uppercase tracking-wide text-gray-500">Lunch</label>
+                          <input
+                            type="text"
+                            value={day.lunch}
+                            onChange={(e) => updateItineraryDay(index, 'lunch', e.target.value)}
+                            className="input-field"
+                          />
+                        </div>
+                        <div>
+                          <label className="mb-1 block text-xs font-medium uppercase tracking-wide text-gray-500">Dinner</label>
+                          <input
+                            type="text"
+                            value={day.dinner}
+                            onChange={(e) => updateItineraryDay(index, 'dinner', e.target.value)}
+                            className="input-field"
+                          />
+                        </div>
+                        <div>
+                          <label className="mb-1 block text-xs font-medium uppercase tracking-wide text-gray-500">Stay Name</label>
+                          <input
+                            type="text"
+                            value={day.stayName}
+                            onChange={(e) => updateItineraryDay(index, 'stayName', e.target.value)}
+                            className="input-field"
+                            placeholder="Sea Breeze Resort"
+                          />
+                        </div>
+                        <div>
+                          <label className="mb-1 block text-xs font-medium uppercase tracking-wide text-gray-500">Stay Type</label>
+                          <input
+                            type="text"
+                            value={day.stayType}
+                            onChange={(e) => updateItineraryDay(index, 'stayType', e.target.value)}
+                            className="input-field"
+                            placeholder="3-star, Boutique, Camp"
+                          />
+                        </div>
+                        <div className="md:col-span-2">
+                          <label className="mb-1 block text-xs font-medium uppercase tracking-wide text-gray-500">Stay Address</label>
+                          <input
+                            type="text"
+                            value={day.stayAddress}
+                            onChange={(e) => updateItineraryDay(index, 'stayAddress', e.target.value)}
+                            className="input-field"
+                            placeholder="Near Calangute Beach, Goa"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
               </div>
               
               <div className="flex justify-end space-x-3 pt-4">

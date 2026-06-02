@@ -7,6 +7,7 @@ const Booking = require('../models/Booking');
 const Trip = require('../models/Trip');
 const Bus = require('../models/Bus');
 const { getFinancialSummary, getDailyRevenue, generateFinancialReport } = require('../controllers/financeController');
+const { getRecentBookings } = require('../controllers/adminController');
 
 // Apply auth and management role to all admin routes
 router.use(auth, authorize('management'));
@@ -29,6 +30,31 @@ router.get('/dashboard/stats', async (req, res) => {
       totalTrips,
       activeTrips
     });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+router.get('/dashboard/recent-bookings', getRecentBookings);
+
+router.get('/bookings', async (req, res) => {
+  try {
+    const bookings = await Booking.find()
+      .populate('userId', 'name mobile email role')
+      .populate('tripId', 'title location price')
+      .sort({ createdAt: -1 })
+      .limit(500);
+
+    res.json(bookings);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+router.get('/trips', async (req, res) => {
+  try {
+    const trips = await Trip.find().sort({ createdAt: -1 }).limit(500);
+    res.json(trips);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

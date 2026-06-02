@@ -14,7 +14,7 @@ const itinerarySchema = new mongoose.Schema({
     dinner: String
   },
   stay: {
-    type: String,
+    type: { type: String },
     name: String,
     address: String
   }

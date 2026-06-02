@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 900" role="img" aria-labelledby="title desc">
+  <title id="title">Weekend Mojo Logo</title>
+  <desc id="desc">Weekend Mojo wordmark with travel inspired road, plane, mountain, and nature motifs.</desc>
+  <defs>
+    <linearGradient id="wmOrange" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#ff8a00" />
+      <stop offset="100%" stop-color="#ff5f1f" />
+    </linearGradient>
+    <linearGradient id="wmTeal" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0f766e" />
+      <stop offset="100%" stop-color="#123f54" />
+    </linearGradient>
+    <linearGradient id="wmRoad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#04121b" />
+      <stop offset="100%" stop-color="#0b2234" />
+    </linearGradient>
+    <filter id="wmShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="10" stdDeviation="14" flood-color="#0f172a" flood-opacity="0.12" />
+    </filter>
+  </defs>
+
+  <rect width="900" height="900" fill="#ffffff"/>
+
+  <g transform="translate(110 70)" filter="url(#wmShadow)">
+    <path d="M95 70c18 0 33 12 39 30l44 143 63-143c6-18 22-30 40-30 18 0 34 11 41 29l42 110 145-143c17-17 46-15 61 4 14 18 12 43-6 59L374 482c-12 12-31 11-42-2-10-13-8-31 4-41L547 206 399 350l-73 173c-8 19-26 31-46 31-21 0-40-13-48-32L168 335 135 208l-41 135c-7 20-25 33-46 33-19 0-36-11-43-29-7-18-3-38 11-51L64 102c9-19 28-32 49-32z" fill="url(#wmOrange)"/>
+
+    <path d="M98 113c15 0 28 10 33 24l36 120 34-78c5-12 18-20 31-20 14 0 27 8 33 21l30 65 118-117c11-11 28-10 39 2 10 12 9 29-3 39L370 308 236 449c-8 8-22 8-30-1-7-8-7-19 1-27l112-118-36-78-44 102c-5 12-17 19-30 19-14 0-27-8-33-21L154 200 118 318c-5 15-19 25-34 25-14 0-27-8-33-21-5-12-3-26 6-35l15-16 26-120c5-14 18-23 33-23z" fill="url(#wmTeal)"/>
+
+    <path d="M229 292c-16 0-30 12-33 28l-27 132c-3 15 3 30 16 39l62 44 178-184 35-56-144 147-86-60c-5-4-7-10-6-16l15-70c3-14 16-24 30-24h-40z" fill="url(#wmRoad)"/>
+
+    <path d="M267 372l46 33 67-66-47-48z" fill="#0b2234" opacity="0.95"/>
+    <path d="M315 158l17 19 44-20-19-14z" fill="#ffffff" opacity="0.9"/>
+    <path d="M123 173l10 10-20 19-10-10z" fill="#ffffff" opacity="0.85"/>
+    <circle cx="466" cy="154" r="30" fill="#ff8a00"/>
+    <path d="M548 118l31 6 24-26 8 6-18 33 17 14-7 8-22-6-24 20-7-7 10-26-21-17z" fill="#0f766e"/>
+
+    <path d="M602 198c-34 0-64 23-72 55l-18 70c-10 36 13 73 50 83l73 19c27 7 55-1 74-20l61-61c17-17 28-39 32-63l8-43c2-12-9-22-21-18l-72 23c-22 7-45 0-60-17l-20-22c-8-9-20-14-33-14z" fill="url(#wmTeal)"/>
+
+    <path d="M692 352l-63-16c-11-3-16-14-11-24l16-31 49 16c16 5 33 1 46-10l35-30 2 12c2 12-2 24-11 33l-29 29c-11 11-27 15-44 11z" fill="#ffffff" opacity="0.15"/>
+
+    <path d="M608 467c37 0 69 19 90 47l-181 1c23-29 58-48 91-48z" fill="#0b2234"/>
+    <path d="M723 442c-10 18-24 33-41 44l-27-27 68-17z" fill="#ffffff" opacity="0.9"/>
+    <circle cx="705" cy="339" r="9" fill="#ffffff"/>
+    <circle cx="653" cy="380" r="6" fill="#ffffff" opacity="0.9"/>
+    <circle cx="615" cy="410" r="5" fill="#ffffff" opacity="0.85"/>
+    <path d="M152 428l24-35 36 28-20 37z" fill="#ffffff" opacity="0.9"/>
+    <path d="M739 528c0 55-92 91-182 91-76 0-140-21-171-53 86-11 156-51 204-92h111c22 0 38 20 38 54z" fill="#ffffff" opacity="0.95"/>
+  </g>
+
+  <g transform="translate(90 610)">
+    <text x="0" y="0" font-family="Poppins, Arial, sans-serif" font-size="132" font-weight="800" letter-spacing="4" fill="#0f172a">WEEKEND</text>
+    <text x="88" y="128" font-family="Poppins, Arial, sans-serif" font-size="150" font-weight="800" letter-spacing="8" fill="url(#wmOrange)">MOJO</text>
+    <line x1="0" y1="174" x2="742" y2="174" stroke="#0f766e" stroke-width="4" opacity="0.8"/>
+    <circle cx="372" cy="174" r="5" fill="#ff5f1f"/>
+    <text x="119" y="212" font-family="Poppins, Arial, sans-serif" font-size="20" font-weight="700" letter-spacing="8" fill="#0f172a" opacity="0.95">ONE WEEKEND • A THOUSAND STORIES</text>
+  </g>
+</svg>

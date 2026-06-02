@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="600" viewBox="0 0 900 600" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <linearGradient id="g" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0%" stop-color="#11998e"/>
+      <stop offset="100%" stop-color="#38ef7d"/>
+    </linearGradient>
+  </defs>
+  <rect width="900" height="600" fill="url(#g)"/>
+  <path d="M0 430L140 360L280 410L430 290L560 360L720 230L900 310V600H0Z" fill="rgba(255,255,255,0.2)"/>
+  <text x="64" y="110" font-family="Poppins, sans-serif" font-size="52" font-weight="700" fill="#fff">Adventure</text>
+  <text x="64" y="165" font-family="Poppins, sans-serif" font-size="20" fill="#fff">Water sports, island tour, campfire night</text>
+</svg>

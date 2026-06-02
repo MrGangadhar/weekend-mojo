@@ -1,5 +1,5 @@
 import InternalLogin from './pages/user/InternalLogin';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 import { AuthProvider, useAuth } from './hooks/useAuth';
 
@@ -32,9 +32,11 @@ import PublishQueue from './pages/editor/PublishQueue';
 // Layout Components
 import Navbar from './components/common/Navbar';
 import ProtectedRoute from './components/common/ProtectedRoute';
+import UpdatePrompt from './components/common/UpdatePrompt';
 
 function AppRoutes() {
   const { user, loading } = useAuth();
+  const location = useLocation();
 
   const getDashboardPath = (role) => {
     switch (role) {
@@ -49,6 +51,8 @@ function AppRoutes() {
     }
   };
 
+  const hideNavbar = location.pathname === '/login' || location.pathname === '/internal-login';
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -58,10 +62,9 @@ function AppRoutes() {
   }
 
   return (
-    <Router>
-      <div className="min-h-screen">
-        <Navbar />
-        <Routes>
+    <div className="min-h-screen">
+      {!hideNavbar && <Navbar />}
+      <Routes>
           {/* Public Routes */}
           <Route path="/" element={<Home />} />
           <Route path="/trip/:id" element={<TripDetails />} />
@@ -198,17 +201,19 @@ function AppRoutes() {
 
           {/* Fallback */}
           <Route path="*" element={<Navigate to={user ? getDashboardPath(user.role) : '/'} replace />} />
-        </Routes>
-        <Toaster position="top-right" />
-      </div>
-    </Router>
+      </Routes>
+      <Toaster position="top-right" />
+      <UpdatePrompt />
+    </div>
   );
 }
 
 function App() {
   return (
     <AuthProvider>
-      <AppRoutes />
+      <Router>
+        <AppRoutes />
+      </Router>
     </AuthProvider>
   );
 }

@@ -45,6 +45,9 @@ export const authAPI = {
 export const tripAPI = {
   getTrips: (params) => api.get('/trips', { params }),
   getTripById: (id) => api.get(`/trips/${id}`),
+  createTrip: (data) => api.post('/trips', data),
+  updateTrip: (id, data) => api.put(`/trips/${id}`, data),
+  deleteTrip: (id) => api.delete(`/trips/${id}`),
   getPopularTrips: () => api.get('/trips/popular'),
   searchTrips: (query) => api.get('/trips/search', { params: { q: query } }),
 };
@@ -53,6 +56,7 @@ export const bookingAPI = {
   initiateBooking: (data) => api.post('/bookings/initiate', data),
   confirmPayment: (data) => api.post('/bookings/confirm-payment', data),
   getUserBookings: () => api.get('/bookings/my-bookings'),
+  getSeatMap: (tripId, params) => api.get(`/bookings/seat-map/${tripId}`, { params }),
   getBookingDetails: (id) => api.get(`/bookings/${id}`),
   cancelBooking: (id, reason) => api.post(`/bookings/${id}/cancel`, { reason }),
 };
@@ -77,13 +81,17 @@ export const videoAPI = {
 
 export const adminAPI = {
   getDashboardStats: () => api.get('/admin/dashboard/stats'),
+  getRecentBookings: () => api.get('/admin/dashboard/recent-bookings'),
   getUsers: () => api.get('/admin/users'),
   updateUserRole: (userId, role) => api.put(`/admin/users/${userId}/role`, { role }),
+  getBookings: () => api.get('/admin/bookings'),
+  getTrips: () => api.get('/admin/trips'),
   getBuses: () => api.get('/admin/buses'),
   createBus: (data) => api.post('/admin/buses', data),
   updateBus: (id, data) => api.put(`/admin/buses/${id}`, data),
   getFinancialSummary: (params) => api.get('/admin/finance/summary', { params }),
   getDailyRevenue: (params) => api.get('/admin/finance/daily-revenue', { params }),
+  getFinancialReport: (params) => api.get('/admin/finance/report', { params }),
 };
 
 export const conductorAPI = {

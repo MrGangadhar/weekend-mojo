@@ -9,6 +9,108 @@ const { generateTicketPDF } = require('../utils/pdfGenerator');
 const { sendNotification } = require('../utils/notifications');
 const crypto = require('crypto');
 
+const buildSeatLabel = (seatNumber, seatType) => {
+  const numeric = parseInt(seatNumber, 10);
+
+  if (seatType === 'Sleeper') {
+    return numeric % 2 === 0 ? `LB ${numeric}` : `UB ${numeric}`;
+  }
+
+  return `S ${numeric}`;
+};
+
+const getSeatType = (bus) => (bus?.type === 'Sleeper' ? 'Sleeper' : 'Seater');
+
+exports.getSeatMap = async (req, res) => {
+  try {
+    const { tripId } = req.params;
+    const { busId } = req.query;
+
+    if (!busId) {
+      return res.status(400).json({ error: 'busId is required' });
+    }
+
+    const trip = await Trip.findById(tripId);
+    const bus = await Bus.findById(busId);
+
+    if (!trip || !bus) {
+      return res.status(404).json({ error: 'Trip or bus not found' });
+    }
+
+    const tripAssignment = bus.assignedTrips?.find((assignment) => assignment.tripId?.toString() === trip._id.toString());
+    const seatType = getSeatType(bus);
+    const totalSeats = bus.totalSeats || 40;
+    const basePrice = tripAssignment?.price || trip.price;
+
+    const seatNumbers = Array.from({ length: totalSeats }, (_, index) => String(index + 1));
+
+    await Seat.updateMany(
+      {
+        busId: bus._id,
+        tripId: trip._id,
+        status: 'blocked',
+        blockedUntil: { $lt: new Date() }
+      },
+      {
+        $set: {
+          status: 'available',
+          bookingId: null,
+          blockedUntil: null
+        }
+      }
+    );
+
+    const existingSeats = await Seat.find({
+      busId: bus._id,
+      tripId: trip._id,
+      seatNumber: { $in: seatNumbers }
+    }).lean();
+
+    const existingSeatMap = new Map(existingSeats.map((seat) => [seat.seatNumber, seat]));
+    const missingSeats = seatNumbers.filter((seatNumber) => !existingSeatMap.has(seatNumber));
+
+    if (missingSeats.length > 0) {
+      await Seat.insertMany(
+        missingSeats.map((seatNumber) => ({
+          busId: bus._id,
+          tripId: trip._id,
+          seatNumber,
+          status: 'available',
+          price: basePrice
+        })),
+        { ordered: false }
+      ).catch(() => {});
+    }
+
+    const refreshedSeats = await Seat.find({
+      busId: bus._id,
+      tripId: trip._id,
+      seatNumber: { $in: seatNumbers }
+    }).sort({ seatNumber: 1 }).lean();
+
+    const seatMap = refreshedSeats.map((seat, index) => ({
+      ...seat,
+      seatType,
+      label: buildSeatLabel(seat.seatNumber, seatType),
+      row: seatType === 'Sleeper' ? Math.ceil((index + 1) / 2) : Math.ceil((index + 1) / 4),
+      column: seatType === 'Sleeper' ? (index % 2) + 1 : (index % 4) + 1
+    }));
+
+    res.json({
+      tripId: trip._id,
+      busId: bus._id,
+      seatType,
+      totalSeats,
+      price: basePrice,
+      boardingPoints: tripAssignment?.boardingPoints || [],
+      seats: seatMap
+    });
+  } catch (error) {
+    console.error('Get seat map error:', error);
+    res.status(500).json({ error: 'Failed to fetch seat map' });
+  }
+};
+
 exports.initiateBooking = async (req, res) => {
   try {
     const { 
@@ -68,6 +170,15 @@ exports.initiateBooking = async (req, res) => {
       status: 'pending'
     });
     
+    // Ensure bookingId is present before validation (pre-save generator may run after validation in some cases)
+    if (!booking.bookingId) {
+      const date = new Date();
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, '0');
+      const random = Math.floor(Math.random() * 10000).toString().padStart(4, '0');
+      booking.bookingId = `WM${year}${month}${random}`;
+    }
+
     await booking.save();
     
     // Block seats temporarily
@@ -96,7 +207,13 @@ exports.initiateBooking = async (req, res) => {
       }
     };
     
-    const order = await razorpay.orders.create(orderOptions);
+    let order;
+    // In development, allow a fallback when Razorpay keys are not configured
+    if (!process.env.RAZORPAY_KEY_ID || process.env.RAZORPAY_KEY_ID.includes('your_razorpay')) {
+      order = { id: `dev_order_${Date.now()}` };
+    } else {
+      order = await razorpay.orders.create(orderOptions);
+    }
     
     // Save payment record
     const payment = new Payment({

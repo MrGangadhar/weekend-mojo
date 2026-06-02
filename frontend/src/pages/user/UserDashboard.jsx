@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { bookingAPI, authAPI } from '../../services/api';
 import { FiCalendar, FiMapPin, FiClock, FiDownload, FiUser, FiMail, FiPhone } from 'react-icons/fi';
 import toast from 'react-hot-toast';
@@ -10,10 +10,20 @@ export default function UserDashboard() {
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('bookings');
+  const location = useLocation();
   
   useEffect(() => {
     fetchData();
   }, []);
+
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const tab = params.get('tab');
+
+    if (tab === 'profile' || tab === 'bookings') {
+      setActiveTab(tab);
+    }
+  }, [location.search]);
   
   const fetchData = async () => {
     try {

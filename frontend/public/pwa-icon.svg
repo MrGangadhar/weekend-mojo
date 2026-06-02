@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title desc">
+  <title id="title">Weekend Mojo Mark</title>
+  <desc id="desc">Weekend Mojo brand mark with travel-inspired W and M initials.</desc>
+  <defs>
+    <linearGradient id="wmOrange" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#ff8a00" />
+      <stop offset="100%" stop-color="#ff5f1f" />
+    </linearGradient>
+    <linearGradient id="wmTeal" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0f766e" />
+      <stop offset="100%" stop-color="#123f54" />
+    </linearGradient>
+    <linearGradient id="wmRoad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#04121b" />
+      <stop offset="100%" stop-color="#0b2234" />
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" rx="88" fill="#ffffff"/>
+  <path d="M69 96c13 0 25 8 30 20l35 86 31-78c5-13 17-22 31-22 14 0 27 8 32 20l28 63 90-88c10-10 25-9 35 2 9 11 8 26-2 35L252 305c-10 10-26 9-34-3-7-11-5-25 5-33l108-102-80 73-43 96c-6 14-19 24-35 24-15 0-29-9-35-23l-33-82-27-91-35 93c-6 15-20 25-36 25-14 0-26-8-31-20-6-13-3-28 7-38l14-14 24-88c4-13 16-22 30-22z" fill="url(#wmOrange)"/>
+  <path d="M86 119c11 0 21 7 25 17l27 73 25-58c4-10 14-16 24-16 11 0 21 6 26 16l23 49 83-81c8-8 21-7 29 1 7 9 7 21-2 28L264 276 166 378c-6 7-17 7-24 0-5-6-6-14-1-21l83-87-29-59-33 79c-4 9-13 15-23 15-11 0-21-6-26-16l-28-72-28 84c-4 11-15 18-26 18-10 0-19-6-23-15-4-10-2-21 5-29l12-12 21-78c4-9 14-16 24-16z" fill="url(#wmTeal)"/>
+  <path d="M181 265c-13 0-24 9-27 22l-23 99c-3 12 2 24 12 31l52 36 153-156 28-47-124 124-73-51c-4-3-6-9-5-14l13-52c3-11 13-19 25-19h-31z" fill="url(#wmRoad)"/>
+  <circle cx="345" cy="137" r="24" fill="#ff8a00"/>
+  <path d="M392 89l25 5 19-21 6 5-14 27 13 11-6 7-18-5-20 17-5-6 8-22-17-14z" fill="#0f766e"/>
+</svg>

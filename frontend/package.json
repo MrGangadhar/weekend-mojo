@@ -5,7 +5,13 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "cap:init": "npx cap init \"Weekend Mojo\" com.weekendmojo.app --webDir=dist",
+    "cap:add:android": "npx cap add android",
+    "cap:copy": "npx cap copy",
+    "cap:open:android": "npx cap open android",
+    "cap:sync": "npx cap sync",
+    "build:android": "npm run build && npx cap copy && npx cap open android"
   },
   "dependencies": {
     "@headlessui/react": "^2.2.9",
@@ -23,7 +29,9 @@
     "react-router-dom": "^6.15.0",
     "recharts": "^2.8.0",
     "socket.io-client": "^4.7.2",
-    "swiper": "^10.2.0"
+    "swiper": "^10.2.0",
+    "xlsx": "^0.18.5",
+    "@capacitor/core": "^6.1.0"
   },
   "devDependencies": {
     "@types/react": "^18.2.15",
@@ -32,6 +40,8 @@
     "autoprefixer": "^10.4.15",
     "postcss": "^8.4.29",
     "tailwindcss": "^3.3.3",
-    "vite": "^4.4.5"
+    "vite": "^4.4.5",
+    "@capacitor/cli": "^6.1.0",
+    "vite-plugin-pwa": "^0.17.4"
   }
 }

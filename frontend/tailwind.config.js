@@ -7,12 +7,14 @@ export default {
   theme: {
     extend: {
       colors: {
-        primary: '#FF5722',
-        secondary: '#FF9800',
-        accent: '#4CAF50',
+        primary: '#0F172A',
+        secondary: '#2563EB',
+        background: '#F8FAFC',
+        card: '#FFFFFF',
+        accent: '#2563EB',
       },
       fontFamily: {
-        sans: ['Inter', 'system-ui', 'sans-serif'],
+        sans: ['Poppins', 'system-ui', 'sans-serif'],
       },
       animation: {
         'spin-slow': 'spin 3s linear infinite',

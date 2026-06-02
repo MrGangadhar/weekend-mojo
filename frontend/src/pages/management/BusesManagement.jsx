@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { adminAPI } from '../../services/api';
-import { FiEdit, FiTrash2, FiPlus, FiMapPin } from 'react-icons/fi';
+import { FiEdit, FiTrash2, FiPlus, FiMapPin, FiX } from 'react-icons/fi';
 import toast from 'react-hot-toast';
 import { DashboardShell } from '../../components/common/DashboardLayout';
 

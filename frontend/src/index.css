@@ -9,11 +9,9 @@
 
   body {
     @apply text-slate-900 antialiased;
-    font-family: Inter, "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
-    background:
-      radial-gradient(circle at top left, rgba(249, 115, 22, 0.12), transparent 28%),
-      radial-gradient(circle at top right, rgba(15, 23, 42, 0.08), transparent 22%),
-      linear-gradient(180deg, #f8fafc 0%, #eef2ff 100%);
+    font-family: Poppins, "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+    background-color: var(--background-color);
+    color: var(--body-text-color, #0f172a);
   }
 
   ::selection {
@@ -24,7 +22,157 @@
 
 @layer components {
   .portal-shell {
-    @apply min-h-screen text-slate-900;
+    @apply min-h-screen overflow-x-hidden text-slate-900;
+  }
+
+  .mobile-app-shell {
+    @apply mx-auto min-h-screen w-full overflow-hidden bg-slate-50 shadow-[0_32px_90px_-45px_rgba(15,23,42,0.65)];
+    background:
+      radial-gradient(circle at top left, rgba(59, 130, 246, 0.18), transparent 30%),
+      linear-gradient(180deg, #f8fbff 0%, #eef6ff 35%, #f8fafc 100%);
+    border-left: 1px solid rgba(255, 255, 255, 0.8);
+    border-right: 1px solid rgba(255, 255, 255, 0.8);
+  }
+
+  @media (min-width: 1024px) {
+    .mobile-app-shell {
+      border-left: 0;
+      border-right: 0;
+      box-shadow: none;
+    }
+  }
+
+  .mobile-app-screen {
+    @apply px-3 pb-6 pt-3 sm:px-4 sm:pt-4 lg:px-8 lg:pt-6;
+  }
+
+  .mobile-app-statusbar {
+    @apply mb-4 flex items-center justify-between gap-2 px-1 text-slate-900 sm:px-2;
+  }
+
+  .mobile-app-hero {
+    @apply relative overflow-hidden rounded-[2rem] text-white shadow-[0_28px_60px_-40px_rgba(15,23,42,0.85)];
+    min-height: 24rem;
+    background: linear-gradient(180deg, rgba(15, 23, 42, 0.05), rgba(15, 23, 42, 0.5));
+  }
+
+  @media (min-width: 640px) {
+    .mobile-app-hero {
+      min-height: 28rem;
+    }
+  }
+
+  .mobile-app-hero-image {
+    @apply absolute inset-0 h-full w-full object-cover;
+  }
+
+  .mobile-app-hero-overlay {
+    @apply absolute inset-0;
+    background:
+      linear-gradient(180deg, rgba(255,255,255,0.12) 0%, rgba(3, 7, 18, 0.12) 50%, rgba(3, 7, 18, 0.55) 100%),
+      radial-gradient(circle at top left, rgba(255,255,255,0.4), transparent 24%);
+  }
+
+  .mobile-app-hero-content {
+    @apply relative z-10 flex h-full flex-col justify-between px-4 py-4 sm:px-5 sm:py-5;
+  }
+
+  .mobile-app-script {
+    font-family: Caveat, cursive;
+  }
+
+  .mobile-app-heading {
+    @apply text-4xl font-extrabold leading-[0.92] tracking-[-0.06em] text-white drop-shadow-[0_10px_22px_rgba(0,0,0,0.24)] sm:text-5xl;
+  }
+
+  .mobile-app-heading-accent {
+    @apply text-blue-700;
+  }
+
+  .mobile-app-subtitle {
+    @apply max-w-[17rem] text-base font-medium leading-6 text-slate-700/95 sm:text-lg;
+  }
+
+  .mobile-app-search {
+    @apply flex items-center gap-3 rounded-full bg-white px-4 py-3 text-slate-500 shadow-[0_18px_40px_-24px_rgba(15,23,42,0.4)];
+  }
+
+  .mobile-app-search-button {
+    @apply flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-blue-600 text-white shadow-lg shadow-blue-600/30;
+  }
+
+  .mobile-app-shortcuts {
+    @apply -mt-8 rounded-[1.8rem] border border-white/70 bg-white/95 p-3 shadow-[0_26px_70px_-42px_rgba(15,23,42,0.45)] backdrop-blur sm:p-4 lg:max-w-none;
+  }
+
+  .mobile-app-shortcut-grid {
+    @apply grid grid-cols-3 gap-2 sm:grid-cols-5 sm:gap-2;
+  }
+
+  .mobile-app-shortcut {
+    @apply flex min-w-0 flex-col items-center gap-2 rounded-[1.2rem] px-2 py-3 text-center transition-transform duration-200 hover:-translate-y-0.5;
+  }
+
+  .mobile-app-shortcut-icon {
+    @apply flex h-12 w-12 items-center justify-center rounded-[1.1rem] text-lg shadow-sm sm:h-14 sm:w-14 sm:text-xl;
+  }
+
+  .mobile-app-card {
+    @apply rounded-[1.75rem] border border-white/70 bg-white/95 shadow-[0_22px_70px_-40px_rgba(15,23,42,0.4)] backdrop-blur;
+  }
+
+  .mobile-app-section-title {
+    @apply text-base font-semibold tracking-tight text-slate-900 sm:text-lg;
+  }
+
+  .mobile-app-section-link {
+    @apply inline-flex items-center gap-1 text-sm font-semibold text-slate-900;
+  }
+
+  .mobile-app-itinerary-card {
+    @apply rounded-[1.5rem] p-4 text-white shadow-lg;
+  }
+
+  .mobile-app-banner {
+    @apply relative overflow-hidden rounded-[1.5rem] text-white shadow-[0_18px_60px_-40px_rgba(59,130,246,0.7)];
+    background: linear-gradient(135deg, #4f6ef7 0%, #6d85fb 55%, #8897ff 100%);
+  }
+
+  .mobile-app-bottom-nav {
+    @apply fixed bottom-0 left-1/2 z-50 flex w-full max-w-2xl -translate-x-1/2 justify-around gap-2 px-3 py-2 lg:hidden;
+    background: linear-gradient(180deg, rgba(6,7,10,1), rgba(14,16,20,1));
+    border-top: 1px solid rgba(255,255,255,0.04);
+    box-shadow: 0 -10px 30px -14px rgba(2,6,23,0.6);
+    padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 0.65rem);
+    backdrop-filter: blur(8px);
+  }
+
+  .mobile-app-bottom-nav-item {
+    @apply flex min-w-0 flex-1 flex-col items-center gap-0.5 rounded-lg px-2 py-2 text-[11px] font-medium text-slate-300 transition duration-200;
+    color: #cbd5e1;
+  }
+
+  .mobile-app-bottom-nav-item .icon {
+    @apply text-[18px];
+    stroke-width: 1.2;
+    color: #e6eef8;
+  }
+
+  .mobile-app-bottom-nav-item-active {
+    @apply text-white;
+    background: transparent;
+  }
+
+  .mobile-app-bottom-nav-item-active::after {
+    content: '';
+    display: block;
+    width: 36%;
+    height: 3px;
+    margin-top: 6px;
+    border-radius: 999px;
+    background: linear-gradient(90deg,#60a5fa,#7c3aed);
+    box-shadow: 0 6px 18px -10px rgba(99,102,241,0.6);
+    transform-origin: center;
   }
 
   .dashboard-hero {
@@ -136,23 +284,426 @@
   }
 
   .portal-mobile-sidebar-sheet {
-    @apply absolute inset-y-0 left-0 w-[18rem] max-w-[86vw] overflow-y-auto border-r border-white/60 bg-slate-50 p-4 shadow-2xl;
+    @apply absolute inset-y-0 left-0 w-[18rem] max-w-[86vw] overflow-y-auto border-r border-white/60 bg-slate-50 p-4 shadow-2xl sm:w-[20rem];
+  }
+
+  :root {
+    --brand-teal: #0f766e; /* dark teal */
+    --brand-teal-dark: #0b4f4a;
+    --brand-orange: #ff8a00; /* vibrant orange */
+    --primary-color: var(--brand-teal-dark);
+    --secondary-color: var(--brand-teal);
+    --accent-color: var(--brand-orange);
+    --background-color: #ffffff;
+    --text-color: #07111f;
+    --body-text-color: #0f172a;
+    --card-color: #ffffff;
+    --icon-color: #dbeef0;
+    --shadow-strong: 0 24px 80px -36px rgba(7, 17, 31, 0.32);
   }
 
   .btn-primary {
-    @apply inline-flex items-center justify-center rounded-xl bg-gradient-to-r from-orange-500 to-amber-500 px-6 py-3 font-semibold text-white shadow-lg shadow-orange-500/20 transition-all duration-200 hover:-translate-y-0.5 hover:from-orange-600 hover:to-amber-600;
+    @apply inline-flex items-center justify-center rounded-xl px-6 py-3 font-semibold text-white transition-all duration-200 hover:-translate-y-0.5;
+    background: linear-gradient(90deg, var(--brand-teal-dark), var(--brand-teal));
+    color: #ffffff;
+    box-shadow: 0 18px 50px -20px rgba(15, 46, 42, 0.45);
   }
-  
+
   .btn-secondary {
     @apply inline-flex items-center justify-center rounded-xl border border-slate-200 bg-white px-6 py-3 font-semibold text-slate-700 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-slate-300 hover:bg-slate-50;
   }
-  
+
   .card {
-    @apply overflow-hidden rounded-[1.5rem] border border-white/70 bg-white/90 shadow-[0_18px_60px_-40px_rgba(15,23,42,0.35)] backdrop-blur transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_25px_70px_-35px_rgba(15,23,42,0.4)];
+    @apply overflow-hidden rounded-[1.5rem] border border-white/70 bg-white/90 shadow-[var(--shadow-strong)] backdrop-blur transition-all duration-300 hover:-translate-y-0.5;
+    background-color: var(--card-color);
+  }
+
+  /* Icon & Button Variants (use theme colors) */
+  .icon {
+    @apply inline-flex items-center justify-center select-none;
+    color: var(--icon-color);
+    font-size: 20px;
+    line-height: 1;
+  }
+
+  .btn-icon {
+    @apply inline-flex items-center justify-center gap-2 rounded-lg px-3 py-2 font-semibold transition-transform duration-150;
+    color: var(--secondary-color);
+    background: transparent;
+    border: 1px solid rgba(37,99,235,0.08);
+  }
+
+  .btn-icon:hover {
+    transform: translateY(-2px) scale(1.02);
+    background: rgba(37,99,235,0.04);
+  }
+
+  .btn-circle {
+    @apply inline-flex items-center justify-center rounded-full;
+    padding: 0.6rem;
+    background-color: var(--secondary-color);
+    color: var(--text-color);
+    box-shadow: 0 8px 30px -18px rgba(37,99,235,0.35);
+    transition: transform 0.18s ease, box-shadow 0.18s ease;
+  }
+
+  .btn-circle:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 14px 40px -18px rgba(37,99,235,0.42);
+  }
+
+  .btn-ghost {
+    @apply inline-flex items-center justify-center gap-2 rounded-lg px-3 py-2 font-semibold;
+    background: transparent;
+    color: var(--primary-color);
+    border: 1px solid rgba(15,23,42,0.06);
+  }
+
+  .btn-ghost:hover {
+    background: rgba(15,23,42,0.03);
   }
   
   .input-field {
-    @apply w-full rounded-xl border border-slate-200 bg-white/90 px-4 py-3 text-slate-900 shadow-sm outline-none transition focus:border-orange-500 focus:ring-4 focus:ring-orange-500/15;
+    @apply w-full rounded-xl border border-slate-200 bg-white/90 px-4 py-3 text-slate-900 shadow-sm outline-none transition;
+    transition: box-shadow 0.18s ease, border-color 0.18s ease;
+  }
+
+  .input-field:focus {
+    border-color: var(--accent-600);
+    box-shadow: 0 6px 24px -12px rgba(93,85,255,0.18);
+  }
+
+  .travel-app-shell {
+    @apply relative overflow-hidden;
+    background:
+      radial-gradient(circle at 15% 5%, rgba(59, 130, 246, 0.3), transparent 30%),
+      radial-gradient(circle at 85% 10%, rgba(255, 138, 61, 0.25), transparent 24%),
+      linear-gradient(180deg, #06101f 0%, #0c1b33 22%, #eef4ff 22%, #eef4ff 100%);
+  }
+
+  .travel-app-shell::before,
+  .travel-app-shell::after {
+    content: '';
+    position: absolute;
+    inset: auto;
+    border-radius: 9999px;
+    filter: blur(42px);
+    opacity: 0.7;
+    pointer-events: none;
+  }
+
+  .travel-app-shell::before {
+    top: 10rem;
+    left: -3rem;
+    width: 12rem;
+    height: 12rem;
+    background: rgba(59, 130, 246, 0.22);
+  }
+
+  .travel-app-shell::after {
+    top: 24rem;
+    right: -4rem;
+    width: 16rem;
+    height: 16rem;
+    background: rgba(255, 138, 61, 0.18);
+  }
+
+  .travel-splash-card {
+    @apply relative overflow-hidden rounded-[2rem] border border-white/15 bg-white/10 p-5 text-white shadow-[0_30px_120px_-55px_rgba(0,0,0,0.75)] backdrop-blur-xl sm:p-6;
+  }
+
+  .travel-section-eyebrow {
+    @apply text-[11px] font-bold uppercase tracking-[0.3em] text-sky-100/80;
+  }
+
+  .travel-search-shell {
+    @apply rounded-[1.8rem] border border-white/70 bg-white/95 p-4 shadow-[0_24px_90px_-55px_rgba(7,17,31,0.35)] backdrop-blur-xl;
+  }
+
+  .travel-search-input {
+    @apply w-full rounded-[1.4rem] border border-slate-200 bg-white px-4 py-4 text-sm font-medium text-slate-800 outline-none transition focus:border-sky-300 focus:ring-4 focus:ring-sky-100;
+  }
+
+  .travel-glass-card {
+    @apply rounded-[1.6rem] border border-white/70 bg-white/85 shadow-[0_22px_70px_-45px_rgba(7,17,31,0.28)] backdrop-blur-xl;
+  }
+
+  .travel-detail-card {
+    @apply overflow-hidden rounded-[1.8rem] border border-white/70 bg-white/90 shadow-[0_24px_90px_-50px_rgba(7,17,31,0.28)] backdrop-blur-xl;
+  }
+
+  .travel-chip {
+    @apply inline-flex items-center justify-center gap-2 rounded-full px-3.5 py-2 text-sm font-semibold transition duration-200;
+  }
+
+  .travel-chip-ghost {
+    @apply border border-slate-200 bg-white text-slate-700 hover:bg-slate-50;
+  }
+
+  .travel-chip-active {
+    @apply border border-sky-500 bg-sky-500 text-white shadow-lg shadow-sky-500/20;
+  }
+
+  .travel-category-card {
+    @apply flex min-h-[5.75rem] min-w-[7.25rem] flex-col justify-between rounded-[1.4rem] border border-white/70 bg-white/95 p-4 text-left shadow-[0_18px_60px_-45px_rgba(7,17,31,0.32)] transition duration-200 hover:-translate-y-0.5 hover:shadow-[0_24px_80px_-44px_rgba(7,17,31,0.38)];
+  }
+
+  .travel-category-card-active {
+    @apply border-sky-500 ring-2 ring-sky-200 shadow-[0_24px_90px_-42px_rgba(56,189,248,0.65)];
+  }
+
+  .travel-category-rail {
+    @apply grid grid-flow-col auto-cols-[minmax(7.25rem,1fr)] gap-3 overflow-x-auto pb-1 pr-1 snap-x snap-mandatory;
+  }
+
+  .travel-category-rail::-webkit-scrollbar {
+    display: none;
+  }
+
+  .travel-bottom-sheet {
+    @apply overflow-hidden rounded-t-[2rem] border border-white/70 bg-white/95 shadow-[0_-28px_120px_-48px_rgba(7,17,31,0.5)] backdrop-blur-xl;
+  }
+
+  .travel-bottom-sheet-handle {
+    @apply mx-auto mt-3 h-1.5 w-14 rounded-full bg-slate-300;
+  }
+
+  .travel-bottom-sheet-panel {
+    @apply border-0 bg-transparent shadow-none;
+  }
+
+  .travel-destination-card {
+    @apply relative overflow-hidden rounded-[1.5rem] border border-white/70 bg-white shadow-[0_20px_70px_-45px_rgba(7,17,31,0.28)] transition duration-200 hover:-translate-y-0.5;
+  }
+
+  .travel-offer-card {
+    @apply min-w-[16rem] shrink-0 rounded-[1.5rem] border border-white/60 bg-gradient-to-br from-slate-950 via-slate-900 to-blue-700 p-4 text-white shadow-[0_22px_70px_-48px_rgba(7,17,31,0.55)];
+  }
+
+  .travel-stat-card {
+    @apply rounded-[1.35rem] border border-slate-200 bg-white/95 p-4 shadow-sm;
+  }
+
+  .travel-loader-dot {
+    @apply inline-block h-2.5 w-2.5 rounded-full bg-white/80;
+    animation: travelPulse 1.3s ease-in-out infinite;
+  }
+
+  .travel-loader-dot:nth-child(2) {
+    animation-delay: 0.18s;
+  }
+
+  .travel-loader-dot:nth-child(3) {
+    animation-delay: 0.36s;
+  }
+
+  .travel-bottom-nav {
+    @apply fixed bottom-0 left-1/2 z-50 grid w-full max-w-[430px] -translate-x-1/2 grid-cols-5 gap-2 px-3 py-2 sm:max-w-2xl lg:hidden;
+    background: linear-gradient(180deg, rgba(6,7,10,1), rgba(14,16,20,1));
+    border-top: 1px solid rgba(255,255,255,0.04);
+    box-shadow: 0 -10px 30px -14px rgba(2,6,23,0.6);
+    padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 0.5rem);
+    backdrop-filter: blur(8px);
+  }
+
+  .travel-bottom-nav-item {
+    @apply flex min-w-0 flex-col items-center gap-0.5 rounded-lg px-2 py-2 text-[11px] font-medium text-slate-300 transition duration-200;
+  }
+
+  .travel-bottom-nav-item .icon {
+    @apply text-[18px];
+    stroke-width: 1.2;
+    color: #e6eef8;
+  }
+
+  .travel-bottom-nav-item-active {
+    @apply text-white;
+  }
+
+  .travel-bottom-nav-item-active::after {
+    content: '';
+    display: block;
+    width: 36%;
+    height: 3px;
+    margin-top: 6px;
+    border-radius: 999px;
+    background: linear-gradient(90deg,#60a5fa,#7c3aed);
+    box-shadow: 0 6px 18px -10px rgba(99,102,241,0.6);
+  }
+
+  .travel-floating-action {
+    @apply fixed bottom-24 right-4 z-40 inline-flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-br from-slate-950 to-blue-700 text-white shadow-[0_20px_60px_-20px_rgba(37,99,235,0.6)] transition hover:-translate-y-0.5 lg:hidden;
+  }
+
+  .travel-filter-panel {
+    @apply rounded-[1.8rem] border border-white/70 bg-white/95 shadow-[0_28px_100px_-55px_rgba(7,17,31,0.45)] backdrop-blur-xl;
+  }
+
+  .travel-field {
+    @apply block;
+  }
+
+  .travel-field-label {
+    @apply mb-2 block text-xs font-semibold uppercase tracking-[0.22em] text-slate-500;
+  }
+
+  .travel-field-control {
+    @apply flex items-center gap-3 rounded-[1.25rem] border border-slate-200 bg-white px-4 py-3 shadow-sm;
+  }
+
+  .travel-field-icon {
+    @apply shrink-0 text-slate-400;
+  }
+
+  .travel-field-input {
+    @apply w-full bg-transparent text-sm font-medium text-slate-800 outline-none;
+  }
+
+  .travel-toggle {
+    @apply flex min-h-[2.8rem] items-center justify-center gap-2 rounded-[1rem] border border-slate-200 bg-white px-3 py-2 text-sm font-semibold text-slate-700 transition duration-200 hover:bg-slate-50;
+  }
+
+  .travel-toggle-active {
+    @apply border-sky-500 bg-sky-50 text-sky-700 shadow-sm;
+  }
+
+  .travel-range {
+    accent-color: #2563eb;
+    @apply h-2 w-full appearance-none rounded-full bg-slate-200;
+  }
+
+  .booking-flow-shell {
+    @apply relative overflow-hidden;
+  }
+
+  .booking-flow-shell-light {
+    background:
+      radial-gradient(circle at top left, rgba(59, 130, 246, 0.16), transparent 28%),
+      radial-gradient(circle at top right, rgba(255, 138, 61, 0.14), transparent 22%),
+      linear-gradient(180deg, #eef4ff 0%, #f8fbff 35%, #eef4ff 100%);
+  }
+
+  .booking-flow-shell-dark {
+    background:
+      radial-gradient(circle at top left, rgba(59, 130, 246, 0.22), transparent 28%),
+      radial-gradient(circle at top right, rgba(255, 138, 61, 0.18), transparent 22%),
+      linear-gradient(180deg, #020617 0%, #0f172a 40%, #111827 100%);
+  }
+
+  .booking-hero-card {
+    @apply relative overflow-hidden rounded-[2rem] border border-white/15 bg-gradient-to-br from-slate-950 via-slate-900 to-blue-700 p-5 text-white shadow-[0_30px_110px_-50px_rgba(15,23,42,0.7)] backdrop-blur-xl sm:p-6;
+  }
+
+  .booking-step-pill {
+    @apply inline-flex items-center justify-center rounded-full border border-white/15 bg-white/10 px-3 py-1.5 text-xs font-semibold text-slate-100 transition duration-200 hover:bg-white/15;
+  }
+
+  .booking-step-pill-active {
+    @apply border-sky-300 bg-sky-300 text-slate-950 shadow-lg shadow-sky-300/20;
+  }
+
+  .booking-stepper-card {
+    @apply rounded-[1.5rem] border border-white/15 bg-white/10 p-4 text-white shadow-[0_20px_70px_-40px_rgba(15,23,42,0.55)] backdrop-blur-xl;
+  }
+
+  .booking-preview-card {
+    @apply overflow-hidden rounded-[1.8rem] border border-white/70 bg-white/95 shadow-[0_24px_90px_-45px_rgba(15,23,42,0.35)] backdrop-blur-xl;
+  }
+
+  .booking-summary-chip {
+    @apply rounded-[1.2rem] bg-slate-50 p-3 shadow-sm;
+  }
+
+  .booking-panel {
+    @apply overflow-hidden rounded-[1.8rem] border border-white/70 bg-white/95 shadow-[0_24px_90px_-45px_rgba(15,23,42,0.3)] backdrop-blur-xl;
+  }
+
+  .booking-panel-header {
+    @apply border-b border-slate-200/70 px-5 py-4 sm:px-6;
+  }
+
+  .booking-panel-body {
+    @apply px-5 py-5 sm:px-6;
+  }
+
+  .booking-panel-title {
+    @apply text-lg font-semibold tracking-tight text-slate-950;
+  }
+
+  .booking-panel-subtitle {
+    @apply mt-1 text-sm text-slate-500;
+  }
+
+  .booking-option-card {
+    @apply rounded-[1.5rem] border border-slate-200 bg-white p-4 shadow-sm transition duration-200 hover:-translate-y-0.5 hover:shadow-md;
+  }
+
+  .booking-option-card-active {
+    @apply border-sky-500 bg-sky-50 shadow-[0_18px_60px_-35px_rgba(37,99,235,0.35)];
+  }
+
+  .booking-option-icon {
+    @apply inline-flex h-11 w-11 items-center justify-center rounded-[1rem] bg-slate-100 text-lg text-slate-600;
+  }
+
+  .booking-option-icon-active {
+    @apply bg-sky-500 text-white;
+  }
+
+  .booking-vehicle-strip {
+    @apply grid gap-3 sm:grid-cols-3;
+  }
+
+  .booking-vehicle-card {
+    @apply rounded-[1.4rem] border border-slate-200 bg-slate-50 p-4 text-left shadow-sm transition duration-200 hover:-translate-y-0.5 hover:bg-white;
+  }
+
+  .booking-vehicle-card-active {
+    @apply border-sky-500 bg-sky-50 shadow-[0_18px_70px_-40px_rgba(37,99,235,0.35)];
+  }
+
+  .booking-segment {
+    @apply inline-flex items-center justify-center gap-2 rounded-[1.15rem] border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-600 shadow-sm transition duration-200 hover:bg-slate-50;
+  }
+
+  .booking-segment-active {
+    @apply border-sky-500 bg-sky-50 text-sky-700 shadow-[0_18px_60px_-36px_rgba(37,99,235,0.35)];
+  }
+
+  .booking-addon-card {
+    @apply rounded-[1.5rem] border border-slate-200 bg-slate-50 p-4 shadow-sm transition duration-200 hover:-translate-y-0.5 hover:bg-white;
+  }
+
+  .booking-addon-card-active {
+    @apply border-sky-500 bg-sky-50 shadow-[0_18px_60px_-36px_rgba(37,99,235,0.35)];
+  }
+
+  .booking-addon-icon {
+    @apply inline-flex h-11 w-11 items-center justify-center rounded-[1rem] bg-white text-lg text-slate-600 shadow-sm;
+  }
+
+  .booking-addon-icon-active {
+    @apply bg-sky-500 text-white;
+  }
+
+  .booking-toggle {
+    @apply inline-flex h-8 w-8 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-400 shadow-sm;
+  }
+
+  .booking-toggle-active {
+    @apply border-sky-500 bg-sky-500 text-white;
+  }
+
+  .booking-bottom-bar {
+    @apply fixed bottom-3 left-1/2 z-40 w-[calc(100%-1.5rem)] max-w-[430px] -translate-x-1/2 rounded-[1.4rem] border border-white/70 bg-white/95 px-4 py-3 shadow-[0_-20px_70px_-40px_rgba(15,23,42,0.35)] backdrop-blur-xl;
+  }
+
+  .booking-success-card {
+    @apply relative overflow-hidden rounded-[2rem] border border-white/70 bg-white/95 shadow-[0_28px_110px_-50px_rgba(15,23,42,0.4)] backdrop-blur-xl;
+  }
+
+  .booking-ticket {
+    @apply rounded-[1.6rem] border border-slate-200 shadow-sm;
   }
 }
 
@@ -173,4 +724,17 @@
 
 .page-fade-in {
   animation: slideUp 0.45s ease-out;
+}
+
+@keyframes travelPulse {
+  0%,
+  80%,
+  100% {
+    transform: scale(0.78);
+    opacity: 0.45;
+  }
+  40% {
+    transform: scale(1);
+    opacity: 1;
+  }
 }

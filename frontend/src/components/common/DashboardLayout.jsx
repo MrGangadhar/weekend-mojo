@@ -157,6 +157,8 @@ export function DashboardShell({
                 icon={metric.icon}
                 color={metric.color}
                 note={metric.note || metric.subtitle}
+                onClick={metric.onClick}
+                isActive={metric.isActive}
               />
             ))}
           </section>
@@ -230,9 +232,23 @@ export function DashboardShell({
   );
 }
 
-export function KpiCard({ label, value, icon: Icon, color = 'bg-orange-500', note }) {
+export function KpiCard({ label, value, icon: Icon, color = 'bg-orange-500', note, onClick, isActive = false }) {
+  const isInteractive = typeof onClick === 'function';
+
   return (
-    <article className="dashboard-kpi">
+    <article
+      className={`dashboard-kpi ${isInteractive ? 'cursor-pointer' : ''} ${isActive ? 'ring-2 ring-orange-300' : ''}`}
+      onClick={onClick}
+      role={isInteractive ? 'button' : undefined}
+      tabIndex={isInteractive ? 0 : undefined}
+      onKeyDown={(e) => {
+        if (!isInteractive) return;
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          onClick?.();
+        }
+      }}
+    >
       <div className="flex items-start justify-between gap-4">
         <div className="min-w-0 space-y-2">
           <p className="dashboard-kpi-label">{label}</p>

@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { 
+  getSeatMap,
   initiateBooking, 
   confirmPayment, 
   getUserBookings, 
@@ -13,6 +14,7 @@ const { authorize } = require('../middleware/rbac');
 router.post('/initiate', auth, initiateBooking);
 router.post('/confirm-payment', auth, confirmPayment);
 router.get('/my-bookings', auth, getUserBookings);
+router.get('/seat-map/:tripId', auth, getSeatMap);
 router.get('/:id', auth, getBookingDetails);
 router.post('/:id/cancel', auth, cancelBooking);
 

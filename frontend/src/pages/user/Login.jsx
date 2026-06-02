@@ -4,6 +4,7 @@ import { useAuth } from '../../hooks/useAuth';
 import { authAPI } from '../../services/api';
 import toast from 'react-hot-toast';
 import { PublicPageShell } from '../../components/common/PublicPageShell';
+import BrandLogo from '../../components/common/BrandLogo';
 
 export default function Login() {
   const [username, setUsername] = useState('');
@@ -59,9 +60,7 @@ export default function Login() {
         <div className="dashboard-panel">
           <div className="dashboard-panel-body space-y-6">
             <div className="text-center">
-              <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-orange-500 to-amber-500 text-white shadow-lg shadow-orange-500/20">
-                WM
-              </div>
+              <BrandLogo className="mx-auto mb-4" />
               <p className="text-sm text-slate-500">Sign in with your username and password</p>
             </div>
 
