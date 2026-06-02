@@ -2,5 +2,9 @@
   "dependencies": {
     "@headlessui/react": "^2.2.9",
     "@heroicons/react": "^2.2.0"
+  },
+  "scripts": {
+    "render:set-envs": "node scripts/render_set_envs.js",
+    "vercel:set-envs": "node scripts/vercel_set_envs.js"
   }
 }
