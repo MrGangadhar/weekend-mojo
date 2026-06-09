@@ -2,8 +2,10 @@ import { io } from 'socket.io-client';
 
 let socket = null;
 
+const DEFAULT_SOCKET_URL = 'https://weekend-mojo.onrender.com';
+
 export const initializeSocket = () => {
-  const SOCKET_URL = import.meta.env.VITE_SOCKET_URL || window.location.origin;
+  const SOCKET_URL = import.meta.env.VITE_SOCKET_URL || DEFAULT_SOCKET_URL;
   socket = io(SOCKET_URL, {
     transports: ['websocket'],
     autoConnect: false,
