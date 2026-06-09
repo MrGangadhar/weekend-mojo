@@ -1,6 +1,7 @@
 import { createContext, useContext, useState, useEffect } from 'react';
 import axios from 'axios';
 import toast from 'react-hot-toast';
+import { authAPI } from '../services/api';
 
 const AuthContext = createContext();
 
@@ -22,7 +23,7 @@ export const AuthProvider = ({ children }) => {
   
   const fetchUser = async () => {
     try {
-      const response = await axios.get('/api/auth/profile');
+      const response = await authAPI.getProfile();
       setUser(response.data);
     } catch (error) {
       logout();
