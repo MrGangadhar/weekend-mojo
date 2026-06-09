@@ -209,7 +209,7 @@ exports.initiateBooking = async (req, res) => {
     
     let order;
     // In development, allow a fallback when Razorpay keys are not configured
-    if (!process.env.RAZORPAY_KEY_ID || process.env.RAZORPAY_KEY_ID.includes('your_razorpay')) {
+    if (!process.env.RAZORPAY_KEY_ID || process.env.RAZORPAY_KEY_ID.includes('your_razorpay') || !razorpay) {
       order = { id: `dev_order_${Date.now()}` };
     } else {
       order = await razorpay.orders.create(orderOptions);

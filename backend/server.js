@@ -1,8 +1,13 @@
 
-// Load environment variables as early as possible
-const dotenvResult = require('dotenv').config();
-if (dotenvResult.error) {
-  console.error('❌ Error loading .env file:', dotenvResult.error);
+// Load environment variables as early as possible.
+// Render and other hosted environments inject env vars directly, so a missing
+// local .env file should not be treated as a startup failure.
+try {
+  require('dotenv').config();
+} catch (error) {
+  if (error.code !== 'ENOENT') {
+    console.warn('⚠️ Could not load .env file:', error.message);
+  }
 }
 
 const express = require('express');
