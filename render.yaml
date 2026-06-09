@@ -2,7 +2,7 @@ services:
   - type: web
     name: weekend-mojo-backend
     env: docker
-    dockerfilePath: backend/Dockerfile
+    dockerfilePath: Dockerfile
     startCommand: node server.js
     healthCheckPath: /health
     plan: starter
