@@ -53,11 +53,14 @@ app.use('/api/', limiter);
 const mongoCandidates = [process.env.MONGO_URI, process.env.MONGODB_URI].filter(Boolean);
 
 if (mongoCandidates.length === 0) {
-  console.error('❌ Neither MONGO_URI nor MONGODB_URI is set in .env');
-  process.exit(1);
+  console.warn('⚠️ Neither MONGO_URI nor MONGODB_URI is set. Starting without a database connection.');
 }
 
 async function connectMongoWithFallback() {
+  if (mongoCandidates.length === 0) {
+    return;
+  }
+
   let lastError = null;
 
   for (const candidate of mongoCandidates) {
@@ -74,8 +77,7 @@ async function connectMongoWithFallback() {
     }
   }
 
-  console.error('❌ MongoDB connection error:', lastError);
-  process.exit(1);
+  console.warn('⚠️ MongoDB connection error, starting without database connection:', lastError?.message || lastError);
 }
 
 connectMongoWithFallback();
